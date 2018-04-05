@@ -6,9 +6,9 @@
 ## Table of Contents
 
 * [Rules](#rules)
-* [How to win](#win)
-* [Code Dipendencies](#dependencies)
-* [Known Bugs](#bugs)
+* [How to win](#how-to-win)
+* [Code Dipendencies](#code-dependencies)
+* [Known Bugs](#known-bugs)
 * [Contributing](#contributing)
 * [Licence](#licence)
 
