@@ -14,8 +14,8 @@ const restart = document.querySelector('.restart');
 const retry = document.querySelector('.retry');
 const stars = document.querySelector('.stars');
 const starsCount = document.querySelector('.starsCount');
-cards = Array.from(cards);
-shuffledCards = Array.from(cards);
+cards = [...cards];
+shuffledCards = [...cards];
 
 const timer = {
   hours: document.getElementById('hours'),
@@ -59,8 +59,6 @@ function setTimer() {
         timer.hours.innerHTML = "0" + timer.hours.innerHTML;
       }
     }
-    console.log("Seconds " + timer.seconds.innerHTML);
-    console.log("Minutes " + timer.minutes.innerHTML);
   }, 1000);
 }
 
@@ -113,6 +111,9 @@ function init() {
   // Resets moves
   moves.innerText = "0";
 
+  //Empty moves stack
+  clickStack = [];
+
   // Shuffling each card and update
   deck.innerHTML = "";
   shuffle(shuffledCards);
@@ -132,7 +133,7 @@ function init() {
 
 //Game logic
 function Game() {
-  if (clickStack.length > 1) {
+  if (clickStack.length === 2) {
     // If cards match, set new class
     if (compare(clickStack)) {
       clickStack[0].setAttribute('class', 'card match');
@@ -179,15 +180,13 @@ function Game() {
 // Listener for card click
 deck.addEventListener('click', function(event) {
   // Opens card if clicked and adds to stack
-  if (event.target.nodeName === "LI" && clickStack.length < 2) {
+  if (event.target.nodeName === "LI" && !event.target.classList.contains("open")) {
     clickStack.push(event.target);
     event.target.classList.add('open', 'show');
   }
   // Game logic update
   Game();
 });
-
-deck.addEventListener('click', startTimer(), {once: true});
 
 // Restart button listener
 restart.addEventListener('click', function() {
