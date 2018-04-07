@@ -35,6 +35,7 @@ function starsReset() {
 
 // Starts the timer
 function setTimer() {
+  
   time = setInterval(function() {
     if (timer.seconds.innerHTML < 59) {
       timer.seconds.innerHTML++;
@@ -57,21 +58,26 @@ function setTimer() {
       }
     }
   }, 1000);
+
 }
 
 // Reset the timer
 function resetTimer() {
+
   clearInterval(time);
   timer.seconds.innerHTML = "00";
   timer.minutes.innerHTML = "00";
   timer.hours.innerHTML = "00";
+
 }
 
 function startTimer() {
+
   //Resets timer
   resetTimer();
   //Starts new timer
   setTimer();
+
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -90,6 +96,7 @@ function shuffle(array) {
 
 // Game initialization / reset
 function init() {
+
   //Stars initialization
   starsReset();
   // Resets win counter
@@ -112,26 +119,35 @@ function init() {
   }
   // Start / Reset timer
   startTimer();
+
 }
 
 function match(card1, card2) {
+
   card1.classList.add("match");
   card2.classList.add("match");
+
 }
 
 // Checks if cards are the same or not
 function compare(card1, card2) {
+
   return card1.firstElementChild.classList.value === card2.firstElementChild.classList.value;
+
 }
 
 function emptyStack() {
+
   clickStack = [];
+
 }
 
 // Closes cards
 function close(card1, card2) {
+
   card1.classList.remove("open", "show");
   card2.classList.remove("open", "show");
+
 }
 
 //Game logic
@@ -145,6 +161,7 @@ function Game(card) {
 
   //If stack contains 2 cards, begin comparing
   if (clickStack.length > 1) {
+
     //Set finish to false, so that player can't click other cards until the logic finishes comparing
     finish = false;
     //if the cards match, add new class & empty stack
@@ -165,6 +182,7 @@ function Game(card) {
         finish = true;
       }, 1000);
     }
+
   }
 
   // Stars logic
@@ -188,25 +206,32 @@ function Game(card) {
     // Update time result
     finishTime.innerHTML = "<strong>" + timer.hours.innerText + ":" + timer.minutes.innerText + ":" + timer.seconds.innerText + "</strong>";
   }
+
 }
 
 // Listener for card click
 deck.addEventListener('click', function(event) {
+
   // Opens card if clicked and adds to stack
   if (event.target.nodeName === "LI" && finish) {
     Game(event.target);
   }
+
 });
 
 // Restart button listener
 restart.addEventListener('click', function() {
+
   init();
+
 });
 
 // Play again listener
 retry.addEventListener('click', function() {
+
   init();
   victory.style.display = "none";
+
 });
 
 // Main
