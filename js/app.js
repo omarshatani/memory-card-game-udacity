@@ -6,6 +6,8 @@ let clickStack = [];
 let winCounter = 0;
 let limit = 12;
 let time;
+let finish = true;
+let clickCount = 0;
 const finishTime = document.querySelector('.finishTime');
 const victory = document.querySelector('.victory');
 const moves = document.querySelector('.moves');
@@ -21,11 +23,6 @@ const timer = {
   hours: document.getElementById('hours'),
   minutes: document.getElementById('minutes'),
   seconds: document.getElementById('seconds')
-}
-
-// Closes a single card
-function close(card) {
-  card.setAttribute('class', 'card');
 }
 
 // Stars reset
@@ -77,14 +74,6 @@ function startTimer() {
   setTimer();
 }
 
-// Checks if cards are the same or not
-function compare(array) {
-  if (array[0].children[0].classList.value === array[1].children[0].classList.value)
-    return true;
-  else
-    return false;
-}
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
   var currentIndex = array.length,
@@ -101,56 +90,77 @@ function shuffle(array) {
 
 // Game initialization / reset
 function init() {
-
   //Stars initialization
   starsReset();
-
   // Resets win counter
   winCounter = 0;
-
   // Resets moves
   moves.innerText = "0";
-
   //Empty moves stack
-  clickStack = [];
-
+  emptyStack();
   // Shuffling each card and update
   deck.innerHTML = "";
   shuffle(shuffledCards);
   for (card of shuffledCards) {
     deck.append(card);
   }
-
   // Closes all cards
   for (card of deck.children) {
-    close(card);
+    card.setAttribute('class', 'card');
   }
-
   // Start / Reset timer
   startTimer();
+}
 
+function match(card1, card2) {
+  card1.classList.add("match");
+  card2.classList.add("match");
+}
+
+// Checks if cards are the same or not
+function compare(card1, card2) {
+  return card1.firstElementChild.classList.value === card2.firstElementChild.classList.value;
+}
+
+function emptyStack() {
+  clickStack = [];
+}
+
+// Closes cards
+function close(card1, card2) {
+  card1.classList.remove("open", "show");
+  card2.classList.remove("open", "show");
 }
 
 //Game logic
-function Game() {
-  if (clickStack.length === 2) {
-    // If cards match, set new class
-    if (compare(clickStack)) {
-      clickStack[0].setAttribute('class', 'card match');
-      clickStack[1].setAttribute('class', 'card match');
-      clickStack = [];
-      // Increment win counter
-      winCounter++;
+function Game(card) {
+
+  // If the previous comparing has ended, push new card clicked
+  if (finish) {
+    clickStack.push(card);
+    card.classList.add("open", "show");
+  }
+
+  //If stack contains 2 cards, begin comparing
+  if (clickStack.length > 1) {
+    //Set finish to false, so that player can't click other cards until the logic finishes comparing
+    finish = false;
+    //if the cards match, add new class & empty stack
+    if (compare(clickStack[0], clickStack[1])) {
+      match(clickStack[0], clickStack[1]);
+      moves.innerText++;
+      emptyStack();
+      finish = true;
     } else {
-      // If cards don't match, close them and empty stack
+      //if the cards don't match, close them after a second
       setTimeout(function() {
-        close(clickStack[0]);
-        close(clickStack[1]);
-        clickStack = [];
+        clickStack[0].classList.remove("open", "show");
+        clickStack[1].classList.remove("open", "show");
+        moves.innerText++;
+        emptyStack();
+        finish = true;
       }, 1000);
     }
-    // Increment moves counter
-    moves.innerText++;
   }
 
   // Stars logic
@@ -174,18 +184,14 @@ function Game() {
     // Update time result
     finishTime.innerHTML = "<strong>" + timer.hours.innerText + ":" + timer.minutes.innerText + ":" + timer.seconds.innerText + "</strong>";
   }
-
 }
 
 // Listener for card click
 deck.addEventListener('click', function(event) {
   // Opens card if clicked and adds to stack
-  if (event.target.nodeName === "LI" && !event.target.classList.contains("open")) {
-    clickStack.push(event.target);
-    event.target.classList.add('open', 'show');
+  if (event.target.nodeName === "LI" && finish) {
+    Game(event.target);
   }
-  // Game logic update
-  Game();
 });
 
 // Restart button listener
