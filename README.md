@@ -35,8 +35,8 @@ The app is built with the following code dependencies:
 
 | Bug | Description | Status |
 | ------ | ------ | ------ |
-| Moves Counter | The moves counter increases if the player clicks more thant two cards at one time. | _Not fixed_ |
-| Card match | If player click on a single card two times it will count as the cards has matched. | _Not fixed_ |
+| Moves Counter | The moves counter increases if the player clicks more thant two cards at one time. | **Fixed** |
+| Card match | If player click on a single card two times it will count as the cards has matched. | **Fixed** |
 
 ## Contributing
 
