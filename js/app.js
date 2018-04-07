@@ -94,6 +94,8 @@ function init() {
   starsReset();
   // Resets win counter
   winCounter = 0;
+  //Reset limit
+  limit = 12;
   // Resets moves
   moves.innerText = "0";
   //Empty moves stack
