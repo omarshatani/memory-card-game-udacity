@@ -150,6 +150,8 @@ function Game(card) {
       match(clickStack[0], clickStack[1]);
       moves.innerText++;
       emptyStack();
+      //Increase win counter
+      winCounter++;
       finish = true;
     } else {
       //if the cards don't match, close them after a second
